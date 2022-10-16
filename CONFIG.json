@@ -2,5 +2,9 @@
   "psexec": "path\\to\\psexec",
   "commands": {
 
+  },
+  "examples": {
+    "test_command_name": "Silent install python",
+    "test_command_arg": "\\server/folder/path/python3.10.exe /S"
   }
 }
