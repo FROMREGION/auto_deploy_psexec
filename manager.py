@@ -7,6 +7,7 @@ from json import load, dump
 from sys import platform
 from pick import pick
 from prettify_print import message_error, message_success, message_magenta, message_warning
+import getpass
 
 
 class Manager:
@@ -14,11 +15,30 @@ class Manager:
         self.check_platform()
         self.HOME_PATH = getcwd()
         self.CONFIG: dict = self.init_config()
+        self.login, self.password = self.account_register()
+        self.current_room = self.select_room()
         self.run()
 
     def run(self):
         if self.CONFIG:
+
             self.return_to_menu(tick_to=3)
+
+    @staticmethod
+    def account_register():
+        print(message_warning(f'\tВведите ваш логин:'))
+        login = input('> ').strip().lower()
+
+        print(message_warning(f'\tВведите ваш пароль:'))
+        password = getpass.getpass('> ').strip()
+
+        return login, password
+
+    @staticmethod
+    def select_room():
+        print(message_warning(f'\tВведите номер аудитории: '))
+        print(message_magenta(f'\tExample: u518-520'))
+        return input('Room: ').lower()
 
     def init_config(self) -> dict:
         """
@@ -35,6 +55,7 @@ class Manager:
                     default_config = {
                         "psexec": "",
                         "commands": {
+                            "Change_Room": "Change_Room",
                             "Add_Command": "Add_Command",
                         },
                         "examples": {
@@ -62,7 +83,10 @@ class Manager:
 
     def show_menu(self):
         system("cls")
-        title = 'Choose command:'
+        title = f'Ваш логин: [{self.login}] \n' \
+                f'Выбранная комната: [{self.current_room}] \n\n' \
+                f'Choose command:'
+
         commands = self.CONFIG["commands"]
         if commands:
             options = [command for command in commands]
@@ -70,6 +94,9 @@ class Manager:
             match option:
                 case "Add_Command":
                     self.add_command()
+                case "Change_Room":
+                    self.current_room = self.select_room()
+                    self.show_menu()
                 case "Remove_Command":
                     pass
                 case default:
