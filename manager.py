@@ -106,9 +106,7 @@ class Manager:
             self.add_command()
 
     def return_to_menu(self, tick_to=15):
-        for tick in range(tick_to, 0, -1):
-            print(message_warning(f'До возврата в главное меню осталось... {tick}'), end="\r", flush=True)
-            sleep(1)
+        system("pause")
         self.show_menu()
 
     def run_command(self, command_name):
